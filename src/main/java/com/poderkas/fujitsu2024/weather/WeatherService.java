@@ -1,2 +1,4 @@
-package com.poderkas.fujitsu2024.weather;public class WeatherService {
+package com.poderkas.fujitsu2024.weather;
+
+public class WeatherService {
 }

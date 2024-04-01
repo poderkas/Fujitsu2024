@@ -1,12 +1,20 @@
 package com.poderkas.fujitsu2024.delivery;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.*;
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.util.Assert;
 import java.time.LocalDateTime;
 
 
+@Getter
+@Setter
 @Entity
 @Table(name="DELIVERY")
 public class Delivery {
@@ -14,42 +22,31 @@ public class Delivery {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime time;
     private String city;
     private String transporation;
 
-    public Long getId() {
-        return id;
-    }
+    //private double priceByWeather;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
-    public LocalDateTime getTime() {
-        return this.time;
-    }
-
-    public void setTime(LocalDateTime time) {
+    public Delivery(LocalDateTime time, String city, String transporation) {
         this.time = time;
-    }
-
-    public String getCity() {
-        return this.city;
-    }
-
-    public void setCity(String city) {
         this.city = city;
-    }
-
-    public String getTransporation() {
-        return this.transporation;
-    }
-
-    public void setTransporation(String transporation) {
         this.transporation = transporation;
     }
 
+    public Delivery() {
 
+    }
+
+    @Override
+    public String toString() {
+        return "Delivery{" +
+                "id=" + id +
+                ", time=" + time +
+                ", city='" + city + '\'' +
+                ", transporation='" + transporation + '\'' +
+                '}';
+    }
 }

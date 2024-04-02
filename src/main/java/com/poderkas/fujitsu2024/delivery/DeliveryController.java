@@ -36,9 +36,9 @@ class DeliveryController {
 
     @PutMapping(path = "{deliveryId}")
     public void updateDelivery(@PathVariable("deliveryId") Long deliveryId,
-                               @RequestParam(required = false) LocalDateTime time,
+                               @RequestParam(required = false) Long timestamp,
                                @RequestParam(required = false) String city,
                                @RequestParam(required = false) String transportation){
-        deliveryService.updateDelivery(deliveryId, time, city, transportation);
+        deliveryService.updateDelivery(deliveryId, timestamp, city, transportation);
     }
 }

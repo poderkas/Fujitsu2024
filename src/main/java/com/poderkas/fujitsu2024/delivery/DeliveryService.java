@@ -37,12 +37,14 @@ public class DeliveryService {
         }
     }
     @Transactional
-    public void updateDelivery(Long deliveryId, LocalDateTime time, String city, String transportation){
+    public void updateDelivery(Long deliveryId, long timestamp, String city, String transportation){
         Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow(() ->
                 new IllegalStateException("Delivery with Id "+ deliveryId+ " does not exist."));
 
-        if(time != null && Objects.equals(delivery.getTime(), time)){
-            delivery.setTime(time);
+        if(!Objects.equals(delivery.getTimestamp(), timestamp)){
+            delivery.setTimestamp(timestamp);
         }
+        //TODO
+        //updateWeather
     }
 }

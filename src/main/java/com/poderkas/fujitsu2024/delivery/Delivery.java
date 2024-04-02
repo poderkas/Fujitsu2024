@@ -22,16 +22,15 @@ public class Delivery {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime time;
+    private Long timestamp;
     private String city;
     private String transporation;
+    private Double price;
 
     //private double priceByWeather;
 
-    public Delivery(LocalDateTime time, String city, String transporation) {
-        this.time = time;
+    public Delivery(Long timestamp, String city, String transporation) {
+        this.timestamp = timestamp;
         this.city = city;
         this.transporation = transporation;
     }
@@ -44,7 +43,7 @@ public class Delivery {
     public String toString() {
         return "Delivery{" +
                 "id=" + id +
-                ", time=" + time +
+                ", time=" + timestamp +
                 ", city='" + city + '\'' +
                 ", transporation='" + transporation + '\'' +
                 '}';

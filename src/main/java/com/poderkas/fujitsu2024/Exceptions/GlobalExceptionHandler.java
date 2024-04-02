@@ -17,9 +17,32 @@ public class GlobalExceptionHandler {
         ErrorObject errorObject = new ErrorObject();
 
         errorObject.setStatusCode(HttpStatus.FORBIDDEN.value());
-        errorObject.setMessage("Usage of selected vehicle type is forbidden");
+        errorObject.setMessage(e.getMessage());
         errorObject.setTimestamp(new Date());
 
         return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(DeliveryNotFoundException.class)
+    public ResponseEntity<ErrorObject> handleDeliveryNotFoundException(DeliveryNotFoundException e) {
+
+        ErrorObject errorObject = new ErrorObject();
+
+        errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
+        errorObject.setMessage(e.getMessage());
+        errorObject.setTimestamp(new Date());
+
+        return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(DeliveryTimestampException.class)
+    public ResponseEntity<ErrorObject> handleDeliveryTimestampException(DeliveryTimestampException e) {
+
+        ErrorObject errorObject = new ErrorObject();
+
+        errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
+        errorObject.setMessage(e.getMessage());
+        errorObject.setTimestamp(new Date());
+
+        return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.NOT_FOUND);
     }
 }

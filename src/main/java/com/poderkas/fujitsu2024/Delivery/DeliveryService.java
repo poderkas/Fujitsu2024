@@ -1,5 +1,8 @@
 package com.poderkas.fujitsu2024.Delivery;
 
+import com.poderkas.fujitsu2024.Exceptions.DeliveryNotFoundException;
+import com.poderkas.fujitsu2024.Exceptions.DeliveryTimestampException;
+import com.poderkas.fujitsu2024.Exceptions.DuplicateDeliveryException;
 import com.poderkas.fujitsu2024.Exceptions.WeatherException;
 import com.poderkas.fujitsu2024.Observation.Observation;
 import com.poderkas.fujitsu2024.Observation.ObservationRepository;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.*;
 
 @Service
 public class DeliveryService {
@@ -32,11 +36,19 @@ public class DeliveryService {
 
     public Delivery getDeliveryByClientSideParams(Delivery incompleteDelivery){
         Delivery completeDelivery = deliveryRepository.findByTimestampAndCityAndTransporation(incompleteDelivery.getTimestamp(),incompleteDelivery.getCity(),incompleteDelivery.getTransporation());
+        if(completeDelivery == null){
+            throw new DeliveryNotFoundException("This delivery is not in the database");
+        }
         return completeDelivery;
     }
 
-
+    //Adds new delivery
+    //Forbids duplication based on a combination of timestamp, city, and transportation method.
     public void addNewDelivery(Delivery delivery) {
+        Delivery alreadyExists =  deliveryRepository.findByTimestampAndCityAndTransporation(delivery.getTimestamp(),delivery.getCity(),delivery.getTransporation());
+        if(alreadyExists!=null){
+            throw new DuplicateDeliveryException("This delivery already exists and cannot be added.");
+        }
 
         deliveryRepository.save(processAndReturnFinishedDeliveryObject(delivery));
 
@@ -63,7 +75,9 @@ public class DeliveryService {
         String weatherStation = cityToStation(city);
 
         Observation obsevationAtGivenTime = observationRepository.findTopByTimestampLessThanEqualOrderByTimestampDesc(timestamp/1000);
-
+        if(obsevationAtGivenTime==null){
+            throw new DeliveryTimestampException("This delivery is outside the range of server weather data.");
+        }
         Station relevantStation = obsevationAtGivenTime.getStationByName(weatherStation);
 
         //Fields relevant for fee calculation

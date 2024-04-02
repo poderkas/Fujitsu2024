@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
+
 @RestController
 @RequestMapping(path="api/delivery")
 class DeliveryController {
@@ -21,7 +22,7 @@ class DeliveryController {
 
     @GetMapping
     public Double getDeliveryPrice(@RequestBody Delivery clientsideDelivery){
-        Delivery completeDelivery = deliveryRepository.findByTimestampAndCityAndTransporation(clientsideDelivery.getTimestamp(), clientsideDelivery.getCity(), clientsideDelivery.getTransporation());
+        Delivery completeDelivery = deliveryService.getDeliveryByClientSideParams(clientsideDelivery);
         return completeDelivery.getPrice();
     }
 

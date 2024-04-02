@@ -38,7 +38,7 @@ public class ObservationService {
         }
     }
     //Scheduled to every hour 15 minutes past the hour..
-    @Scheduled(cron = "* 15 * * * *")
+    @Scheduled(cron = "0 15 * * * *")
     void fetchObservation() throws MalformedURLException, JAXBException {
         URL url = new URL("https://www.ilmateenistus.ee/ilma_andmed/xml/observations.php");
 

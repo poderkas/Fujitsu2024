@@ -31,6 +31,11 @@ public class DeliveryService {
         return deliveryRepository.findAll();
     }
 
+    public Delivery getDeliveryByClientSideParams(Delivery incompleteDelivery){
+        Delivery completeDelivery = deliveryRepository.findByTimestampAndCityAndTransporation(incompleteDelivery.getTimestamp(),incompleteDelivery.getCity(),incompleteDelivery.getTransporation());
+        return completeDelivery;
+    }
+
 
     public void addNewDelivery(Delivery delivery) {
 

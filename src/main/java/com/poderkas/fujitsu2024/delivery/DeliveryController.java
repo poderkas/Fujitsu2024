@@ -13,14 +13,19 @@ import java.util.List;
 class DeliveryController {
 
     private final DeliveryService deliveryService;
+    private final DeliveryRepository deliveryRepository;
+
     @Autowired
-    public DeliveryController(DeliveryService deliveryService) {
+    public DeliveryController(DeliveryService deliveryService,
+                              DeliveryRepository deliveryRepository) {
         this.deliveryService = deliveryService;
+        this.deliveryRepository = deliveryRepository;
     }
 
     @GetMapping
-    public List<Delivery> getDeliveries(){
-        return deliveryService.getDeliveries();
+    public Double getDeliveryPrice(@RequestBody Delivery clientsideDelivery){
+        Delivery completeDelivery = deliveryRepository.findByTimestampAndCityAndTransporation(clientsideDelivery.getTimestamp(), clientsideDelivery.getCity(), clientsideDelivery.getTransporation());
+        return completeDelivery.getPrice();
     }
 
     @PostMapping

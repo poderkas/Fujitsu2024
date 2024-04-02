@@ -9,7 +9,7 @@ class Fujitsu2024ApplicationTests {
 
     @Test
     void addDelivery(){
-        Delivery delivery = new Delivery(1712029400, "Tallinn", "Bike");
+        Delivery delivery = new Delivery(1712029400000L, "Tallinn", "Bike");
 
     }
 }

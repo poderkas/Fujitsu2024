@@ -1,1 +1,9 @@
-01.04.2024 Lisan veel täna ilma salvestamise @Scheduled meetodi ja hinna arvutuse.
+# Fujitsu 2024 proovitöö
+
+### H2 In-Memory andmebaas
+
+http://localhost:8080/h2-console/
+
+### API info
+
+http://localhost:8080/swagger-ui/index.html

@@ -35,7 +35,7 @@ public class DeliveryService {
     }
 
     public Delivery getDeliveryByClientSideParams(Delivery incompleteDelivery){
-        Delivery completeDelivery = deliveryRepository.findByTimestampAndCityAndTransporation(incompleteDelivery.getTimestamp(),incompleteDelivery.getCity(),incompleteDelivery.getTransporation());
+        Delivery completeDelivery = deliveryRepository.findByTimestampAndCityAndTransportation(incompleteDelivery.getTimestamp(),incompleteDelivery.getCity(),incompleteDelivery.getTransportation());
         if(completeDelivery == null){
             throw new DeliveryNotFoundException("This delivery is not in the database");
         }
@@ -44,8 +44,8 @@ public class DeliveryService {
 
     //Adds new delivery
     //Forbids duplication based on a combination of timestamp, city, and transportation method.
-    public void addNewDelivery(Delivery delivery) {
-        Delivery alreadyExists =  deliveryRepository.findByTimestampAndCityAndTransporation(delivery.getTimestamp(),delivery.getCity(),delivery.getTransporation());
+    public void addNewDelivery(Delivery delivery) throws WeatherException {
+        Delivery alreadyExists =  deliveryRepository.findByTimestampAndCityAndTransportation(delivery.getTimestamp(),delivery.getCity(),delivery.getTransportation());
         if(alreadyExists!=null){
             throw new DuplicateDeliveryException("This delivery already exists and cannot be added.");
         }
@@ -90,15 +90,15 @@ public class DeliveryService {
         //Calculation for Tallinn
         if(city.equals("Tallinn")){
 
-            if (incompleteDelivery.getTransporation().equals("Car")){
+            if (incompleteDelivery.getTransportation().equals("Car")){
                 deliveryFee+=4.0;
             }
 
-            if (incompleteDelivery.getTransporation().equals("Scooter")){
+            if (incompleteDelivery.getTransportation().equals("Scooter")){
                 deliveryFee+=3.5;
             }
 
-            if (incompleteDelivery.getTransporation().equals("Bike")){
+            if (incompleteDelivery.getTransportation().equals("Bike")){
                 deliveryFee+=3.0;
             }
         }
@@ -106,15 +106,15 @@ public class DeliveryService {
         //Calculation for Tartu
         if(city.equals("Tartu")){
 
-            if (incompleteDelivery.getTransporation().equals("Car")){
+            if (incompleteDelivery.getTransportation().equals("Car")){
                 deliveryFee+=3.5;
             }
 
-            if (incompleteDelivery.getTransporation().equals("Scooter")){
+            if (incompleteDelivery.getTransportation().equals("Scooter")){
                 deliveryFee+=3.0;
             }
 
-            if (incompleteDelivery.getTransporation().equals("Bike")){
+            if (incompleteDelivery.getTransportation().equals("Bike")){
                 deliveryFee+=2.5;
             }
         }
@@ -122,21 +122,21 @@ public class DeliveryService {
         //Calculation for Pärnu
         if(city.equals("Pärnu")){
 
-            if (incompleteDelivery.getTransporation().equals("Car")){
+            if (incompleteDelivery.getTransportation().equals("Car")){
                 deliveryFee+=3.0;
             }
 
-            if (incompleteDelivery.getTransporation().equals("Scooter")){
+            if (incompleteDelivery.getTransportation().equals("Scooter")){
                 deliveryFee+=2.5;
             }
 
-            if (incompleteDelivery.getTransporation().equals("Bike")){
+            if (incompleteDelivery.getTransportation().equals("Bike")){
                 deliveryFee+=2.0;
             }
         }
 
-        if(isForbiddenWeather(relevantStation, incompleteDelivery.getTransporation())){
-            new WeatherException("Usage of selected vehicle type is forbidden");
+        if(isForbiddenWeather(relevantStation, incompleteDelivery.getTransportation())){
+            throw new WeatherException("Usage of selected vehicle type is forbidden");
         }
 
         incompleteDelivery.setPrice(deliveryFee);
@@ -194,6 +194,12 @@ public class DeliveryService {
         if(city.equals("Pärnu")){
             return "Pärnu";
         }
+
+        //This is for testing
+        if (city.equals("Luna")){
+            return "Kuu";
+        }
+
         else{
             return "Selles linnas ei pakuta teenust.";
         }

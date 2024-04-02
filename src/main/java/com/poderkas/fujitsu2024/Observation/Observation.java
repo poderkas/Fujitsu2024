@@ -2,7 +2,9 @@ package com.poderkas.fujitsu2024.Observation;
 
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
@@ -10,6 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @XmlRootElement(name = "observations")
 @Entity
 @XmlAccessorType(XmlAccessType.FIELD)

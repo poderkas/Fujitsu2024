@@ -14,7 +14,6 @@ public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-
     private String name;
     private Long wmocode;
     private Double longitude;
@@ -34,6 +33,5 @@ public class Station {
     private Double uvindex;
     private Double sunshineduration;
     private Integer globalradiation;
-
 
 }

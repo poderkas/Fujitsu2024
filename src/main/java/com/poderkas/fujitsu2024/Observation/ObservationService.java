@@ -37,7 +37,7 @@ public class ObservationService {
             throw new IllegalStateException("Delivery with Id "+ observationId+ " does not exist.");
         }
     }
-
+    //Scheduled to run every 15 minutes.
     @Scheduled(cron = "* */15 * * * *")
     void fetchObservation() throws MalformedURLException, JAXBException {
         URL url = new URL("https://www.ilmateenistus.ee/ilma_andmed/xml/observations.php");

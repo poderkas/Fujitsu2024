@@ -1,16 +1,9 @@
-package com.poderkas.fujitsu2024.delivery;
+package com.poderkas.fujitsu2024.Delivery;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.*;
-import org.springframework.core.style.ToStringCreator;
-import org.springframework.util.Assert;
-import java.time.LocalDateTime;
 
 
 @Getter
@@ -27,7 +20,7 @@ public class Delivery {
     private String transporation;
     private Double price;
 
-    //private double priceByWeather;
+
 
     public Delivery(Long timestamp, String city, String transporation) {
         this.timestamp = timestamp;

@@ -1,14 +1,13 @@
-package com.poderkas.fujitsu2024.delivery;
+package com.poderkas.fujitsu2024.Delivery;
 
+import com.poderkas.fujitsu2024.Exceptions.WeatherException;
 import com.poderkas.fujitsu2024.Observation.Observation;
 import com.poderkas.fujitsu2024.Observation.ObservationRepository;
 import com.poderkas.fujitsu2024.Observation.Station;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -53,22 +52,11 @@ public class DeliveryService {
     }
 
 
-
-    @Transactional
-    public void updateDelivery(Long deliveryId, long timestamp, String city, String transportation){
-        Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow(() ->
-                new IllegalStateException("Delivery with Id "+ deliveryId+ " does not exist."));
-
-        if(!Objects.equals(delivery.getTimestamp(), timestamp)){
-            delivery.setTimestamp(timestamp);
-        }
-        //TODO
-        //updateWeather
-    }
-
-
     //Delivery fee business logic
-    public Delivery processAndReturnFinishedDeliveryObject(Delivery incompleteDelivery){
+    //Receives delivery from client.
+    //Only POST request fields needed.
+    //
+    public Delivery processAndReturnFinishedDeliveryObject(Delivery incompleteDelivery) throws WeatherException {
         Long timestamp = incompleteDelivery.getTimestamp();
         String city = incompleteDelivery.getCity();
 
@@ -85,6 +73,7 @@ public class DeliveryService {
 
         Double deliveryFee = 0.0;
 
+        //Calculation for Tallinn
         if(city.equals("Tallinn")){
 
             if (incompleteDelivery.getTransporation().equals("Car")){
@@ -100,6 +89,7 @@ public class DeliveryService {
             }
         }
 
+        //Calculation for Tartu
         if(city.equals("Tartu")){
 
             if (incompleteDelivery.getTransporation().equals("Car")){
@@ -115,6 +105,7 @@ public class DeliveryService {
             }
         }
 
+        //Calculation for Pärnu
         if(city.equals("Pärnu")){
 
             if (incompleteDelivery.getTransporation().equals("Car")){
@@ -129,8 +120,12 @@ public class DeliveryService {
                 deliveryFee+=2.0;
             }
         }
-        incompleteDelivery.setPrice(deliveryFee);
 
+        if(isForbiddenWeather(relevantStation, incompleteDelivery.getTransporation())){
+            new WeatherException("Usage of selected vehicle type is forbidden");
+        }
+
+        incompleteDelivery.setPrice(deliveryFee);
         return incompleteDelivery;
     }
 
@@ -162,6 +157,19 @@ public class DeliveryService {
         return extraFee;
     }
 
+    //Checks if vehicle is being used during a forbidden weather phenomenon.
+    public Boolean isForbiddenWeather(Station station, String transportation){
+        String[] forbiddenPhenomenons ={"Thunderstorm", "Thunder", "Hail", "Glaze"};
+        if(transportation.equals("Bike") && station.getWindspeed() > 20.0){
+          return true;
+        }
+        if((transportation.equals("Bike") || transportation.equals("Scooter")) && Arrays.asList(forbiddenPhenomenons).contains(station.getPhenomenon())){
+            return true;
+        }
+        return false;
+    }
+
+    //Converts city names into weather station names.
     public String cityToStation(String city){
         if(city.equals("Tallinn")){
             return "Tallinn-Harku";

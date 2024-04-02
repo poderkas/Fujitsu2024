@@ -1,11 +1,8 @@
-package com.poderkas.fujitsu2024.delivery;
+package com.poderkas.fujitsu2024.Delivery;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 
 @RestController
@@ -39,11 +36,4 @@ class DeliveryController {
         deliveryService.deleteDelivery(deliveryId);
     }
 
-    @PutMapping(path = "{deliveryId}")
-    public void updateDelivery(@PathVariable("deliveryId") Long deliveryId,
-                               @RequestParam(required = false) Long timestamp,
-                               @RequestParam(required = false) String city,
-                               @RequestParam(required = false) String transportation){
-        deliveryService.updateDelivery(deliveryId, timestamp, city, transportation);
-    }
 }

@@ -25,4 +25,13 @@ public class Observation {
     @OneToMany(cascade = CascadeType.ALL)
     @XmlElement(name = "station")
     private List<Station> stationList;
+
+    public Station getStationByName(String stationName){
+        for (Station station : stationList) {
+            if (station.getName().equals(stationName)){
+                return station;
+            }
+        }
+        return null;
+    }
 }

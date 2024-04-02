@@ -37,12 +37,8 @@ public class ObservationService {
             throw new IllegalStateException("Delivery with Id "+ observationId+ " does not exist.");
         }
     }
-    public Observation getObservationAtTime(Long time){
-        Observation observation = observationRepository.findTopByTimestampLessThanEqualOrderByTimestampDesc(time);
-        return observation;
-    }
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "* */15 * * * *")
     void fetchObservation() throws MalformedURLException, JAXBException {
         URL url = new URL("https://www.ilmateenistus.ee/ilma_andmed/xml/observations.php");
 

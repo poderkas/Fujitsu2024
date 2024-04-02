@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ObservationRepository extends JpaRepository<Observation,Long> {
     public Observation findTopByTimestampLessThanEqualOrderByTimestampDesc(Long timestamp);
+
 }

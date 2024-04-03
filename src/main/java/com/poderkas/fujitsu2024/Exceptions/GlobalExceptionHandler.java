@@ -57,4 +57,27 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(DeliveryCityException.class)
+    public ResponseEntity<ErrorObject> handleDeliveryCityException(DeliveryCityException e) {
+
+        ErrorObject errorObject = new ErrorObject();
+
+        errorObject.setStatusCode(HttpStatus.FORBIDDEN.value());
+        errorObject.setMessage(e.getMessage());
+        errorObject.setTimestamp(new Date());
+
+        return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.FORBIDDEN);
+    }
+    @ExceptionHandler(DeliveryCityException.class)
+    public ResponseEntity<ErrorObject> handleDeliveryTransportationMethodException(DeliveryTransportationMethodException e) {
+
+        ErrorObject errorObject = new ErrorObject();
+
+        errorObject.setStatusCode(HttpStatus.FORBIDDEN.value());
+        errorObject.setMessage(e.getMessage());
+        errorObject.setTimestamp(new Date());
+
+        return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.FORBIDDEN);
+    }
 }

@@ -1,9 +1,6 @@
 package com.poderkas.fujitsu2024.Delivery;
 
-import com.poderkas.fujitsu2024.Exceptions.DeliveryNotFoundException;
-import com.poderkas.fujitsu2024.Exceptions.DeliveryTimestampException;
-import com.poderkas.fujitsu2024.Exceptions.DuplicateDeliveryException;
-import com.poderkas.fujitsu2024.Exceptions.WeatherException;
+import com.poderkas.fujitsu2024.Exceptions.*;
 import com.poderkas.fujitsu2024.Observation.Observation;
 import com.poderkas.fujitsu2024.Observation.ObservationRepository;
 import com.poderkas.fujitsu2024.Observation.Station;
@@ -68,16 +65,31 @@ public class DeliveryService {
     //Receives delivery from client.
     //Only POST request fields needed.
     //
-    public Delivery processAndReturnFinishedDeliveryObject(Delivery incompleteDelivery) throws WeatherException {
+    public Delivery processAndReturnFinishedDeliveryObject(Delivery incompleteDelivery) throws WeatherException, DeliveryTimestampException, DeliveryCityException, DeliveryTransportationMethodException {
         Long timestamp = incompleteDelivery.getTimestamp();
         String city = incompleteDelivery.getCity();
-
+        String transportationMethod = incompleteDelivery.getTransportation();
         String weatherStation = cityToStation(city);
-
         Observation obsevationAtGivenTime = observationRepository.findTopByTimestampLessThanEqualOrderByTimestampDesc(timestamp/1000);
-        if(obsevationAtGivenTime==null){
-            throw new DeliveryTimestampException("This delivery is outside the range of server weather data.");
+
+
+        //Invalid city exception handling.
+        if(!city.equals("Tallinn") && !city.equals("Tartu") && !city.equals("Pärnu")){
+            throw new DeliveryCityException("This city is not included in the delivery service.");
         }
+
+        //Invalid transportation method exception handling.
+        if (!transportationMethod.equals("Car") && !transportationMethod.equals("Bike") && !transportationMethod.equals("Scooter")){
+            throw new DeliveryTransportationMethodException("Delivery has a malformed or unsupported transportation method.");
+        }
+
+
+        //Invalid delivery timestamp exception handling
+        if(obsevationAtGivenTime==null){
+            throw new DeliveryTimestampException("Delivery timestamp is malformed or outside the range of server weather data.");
+        }
+
+
         Station relevantStation = obsevationAtGivenTime.getStationByName(weatherStation);
 
         //Fields relevant for fee calculation

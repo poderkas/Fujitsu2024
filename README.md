@@ -8,6 +8,9 @@ The project is written in Java 21. Make sure to use the correct JDK before execu
 
 http://localhost:8080/h2-console
 
+user: user
+
+password: password
 
 ### API info
 
